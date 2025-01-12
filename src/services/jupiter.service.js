@@ -6,16 +6,16 @@ import { HttpsProxyAgent } from 'https-proxy-agent';
 import { RPC_CONFIG, PROXY_LIST } from '../config/index.js';
 
 const SOL_MINT = 'So11111111111111111111111111111111111111112';
-const MIN_TOKEN_AMOUNT = 5; // Минимальное количество токенов для продажи
-const MAX_RETRIES = 5; // Максимальное количество попыток
-const RETRY_DELAY = 3000; // Задержка между попытками (2 секунды)
+const MIN_TOKEN_AMOUNT = 5; // Minimum amount of tokens to sell
+const MAX_RETRIES = 5; // Maximum number of attempts
+const RETRY_DELAY = 3000; // Delay between attempts (2 seconds)
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function sellToken(wallet, tokenInfo, tokenMint, tokenAmount, attempt = 1) {
     try {
         try {
-            // Получаем случайный прокси, если включен режим прокси
+            // Get random proxy if proxy mode is enabled
             const proxyUrl = RPC_CONFIG.USE_MULTI_PROXY === 1 ? 
                 PROXY_LIST[Math.floor(Math.random() * PROXY_LIST.length)].split(':') : null;
             
@@ -65,7 +65,7 @@ async function sellToken(wallet, tokenInfo, tokenMint, tokenAmount, attempt = 1)
                 });
 
             } else {
-                // Безопасный мод - ждем подтверждения
+                // Safe mode - wait for confirmation
                 const txid = await conn.sendRawTransaction(rawtransaction, {
                     skipPreflight: false,
                     maxRetries: 4
@@ -98,7 +98,7 @@ async function sellToken(wallet, tokenInfo, tokenMint, tokenAmount, attempt = 1)
             //     }
             // }
 
-            console.log(`\x1b[32m[${new Date().toLocaleTimeString()}] [${wallet.publicKey.toString().slice(0, 4)}..] Продажа ${tokenAmount.uiAmount} ${tokenMint} завершена\x1b[0m`);
+            console.log(`\x1b[32m[${new Date().toLocaleTimeString()}] [${wallet.publicKey.toString().slice(0, 4)}..] Sale of ${tokenAmount.uiAmount} ${tokenMint} completed\x1b[0m`);
             return true;
 
         } catch (error) {
@@ -146,14 +146,14 @@ export async function sellAllTokens(wallet, tokenAddress = null) {
         
         
     } catch (error) {
-        console.error(`\x1b[31m~~~ [!] | ERROR | [${wallet.publicKey.toString().slice(0, 4)}..] Ошибка при продаже токенов: ${error}\x1b[0m`);
+        console.error(`\x1b[31m~~~ [!] | ERROR | [${wallet.publicKey.toString().slice(0, 4)}..] Error selling tokens: ${error}\x1b[0m`);
         throw error;
     }
 } 
 
 export async function buyToken(wallet, tokenAddress, solAmount, attempt = 1) {
     try {
-        // Получаем случайный прокси, если включен режим прокси
+        // Get random proxy if proxy mode is enabled
         const proxyUrl = RPC_CONFIG.USE_MULTI_PROXY === 1 ? 
             PROXY_LIST[Math.floor(Math.random() * PROXY_LIST.length)].split(':') : null;
         
@@ -235,7 +235,7 @@ export async function buyToken(wallet, tokenAddress, solAmount, attempt = 1) {
             //         return buyToken(wallet, tokenAddress, solAmount, attempt + 1);
             //     }
 
-            console.log(`\x1b[32m[${new Date().toLocaleTimeString()}] [${wallet.publicKey.toString().slice(0, 4)}..] Покупка ${solAmount} SOL -> ${expectedAmount} токенов завершена\x1b[0m`);
+            console.log(`\x1b[32m[${new Date().toLocaleTimeString()}] [${wallet.publicKey.toString().slice(0, 4)}..] Purchase of ${solAmount} SOL -> ${expectedAmount} tokens completed\x1b[0m`);
         // }
 
     } catch (error) {
@@ -250,6 +250,6 @@ export async function buyTokenService(wallet, tokenAddress, solAmount) {
     try {
         await buyToken(wallet, tokenAddress, solAmount);
     } catch (error) {
-        console.error(`\x1b[31m~~~ [!] | ERROR | [${wallet.publicKey.toString().slice(0, 4)}..] Ошибка при покупке токенов: ${error}\x1b[0m`);
+        console.error(`\x1b[31m~~~ [!] | ERROR | [${wallet.publicKey.toString().slice(0, 4)}..] Error buying tokens: ${error.message}\x1b[0m`);
     }
 }

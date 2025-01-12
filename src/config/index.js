@@ -2,10 +2,10 @@ import pkg from '@solana/web3.js';
 const { PublicKey, Connection } = pkg;
 import { HttpsProxyAgent } from 'https-proxy-agent';
 
-// Настройки RPC и прокси
+// RPC and proxy settings
 const RPC_CONFIG = {
-    USE_MULTI_RPC: 1, // 0 - используется одна RPCшка, 1 - используется несколько RPCшек
-    USE_MULTI_PROXY: 0, // 0 - не используется прокси, 1 - используется прокси
+    USE_MULTI_RPC: 1, // 0 - use single RPC, 1 - use multiple RPCs
+    USE_MULTI_PROXY: 0, // 0 - not use proxy, 1 - use proxy
     POOL_SIZE: 5,
 };
 
@@ -75,7 +75,7 @@ class ConnectionPool {
     }
 }
 
-// Перехват ошибок 429
+// Error handling 429
 const originalConsoleError = console.error;
 console.error = (...args) => {
     if (args.some(arg => 
@@ -87,7 +87,7 @@ console.error = (...args) => {
     originalConsoleError.apply(console, args);
 };
 
-// Создаем пул соединений
+// Create connection pool
 const connectionPool = new ConnectionPool(
     RPC_ENDPOINTS,
     PROXY_LIST,
@@ -98,47 +98,31 @@ const connectionPool = new ConnectionPool(
     }
 );
 
-// Экспорты
+// Exports
 export const connection = connectionPool.getConnection();
 export const getConnection = () => connectionPool.getConnection();
 export const TOTAL_RANGE_INTERVAL = 68;
 
 export const MAX_PRIORITY_FEE = 1000000;
-export const MAX_PRIORITY_FEE_REMOVE_LIQUIDITY = 1500000; // Примерно 0.0001 SOL
-export const MAX_PRIORITY_FEE_CREATE_POSITION = 1500000; // Примерно 0.0001 SOL
-export const TRANSACTION_MODE = 1 // 1 - DEGEN {НЕ ЖДЕТ ПОДТВЕРЖДЕНИЯ ТРАНЗАКЦИИ, СООТВЕТСТВЕННО, МОГУТ БЫТЬ ЕРРОРЫ} 0 - DEGEN {ЖДЕТ ПОДТВЕРЖДЕНИЯ ТРАНЗАКЦИИ}
+export const MAX_PRIORITY_FEE_REMOVE_LIQUIDITY = 1500000; // Approximately 0.0001 SOL
+export const MAX_PRIORITY_FEE_CREATE_POSITION = 1500000; // Approximately 0.0001 SOL
+export const TRANSACTION_MODE = 1 // 1 - DEGEN {DOES NOT WAIT FOR TRANSACTION CONFIRMATION, SO THERE MAY BE ERRORS} 0 - SAFE {WAITS FOR TRANSACTION CONFIRMATION}
 export const TOKEN_PROGRAM_ID = new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
 
-// Добавляем экспорт RPC_CONFIG и PROXY_LIST
+// Add RPC_CONFIG and PROXY_LIST export
 export { RPC_CONFIG, PROXY_LIST };
 
-// Конфигурация для свапов юпитера
+// Jupiter swap configuration
 export const SLIPPAGE_BPS = 5 * 100; // 5%
 export const SELL_PRIORITY_FEE = 0.0003 * 1000000000; // 0.0003 SOL
 export const BUY_PRIORITY_FEE = 0.0005 * 1000000000; // 0.0005 SOL
 
 
-// Кошельки [!] Не советую использовать много кошельков, так как это может привести к ошибкам RPC
+// Wallets [!] Not recommended to use many wallets as it may lead to RPC errors
 export const WALLETS = {
     "1": {
-        privateKey: "Your Private Key",
-        description: "Your Wallet Address"
-    },
-    "2": {
-        privateKey: "Your Private Key2",
-        description: "Your Wallet Address2"
-    },
-    "3": {
-        privateKey: "Your Private Key3",
-        description: "Your Wallet Address3"
-    },
-    "4": {
-        privateKey: "Your Private Key4",
-        description: "Your Wallet Address4"
-    },
-    "5": {
-        privateKey: "Your Private Key5",
-        description: "Your Wallet Address5"
-    },
-    // Добавьте дополнительные кошельки по необходимости
+        privateKey: "d6e4x3RpvS5xL9fas74eGS4PDJdf6bSqfVdAQzwfodgFiNw1Soh7mDbbDpx1AUPZpAj7iHxq2XfdxbszffAgzpX",
+        description: "4oQxUtnXm3n8jokBiWMccwubfzATKZE9AmiiLEnyf2jy"
+    }
+    // Add additional wallets as needed
 };

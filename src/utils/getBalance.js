@@ -22,7 +22,7 @@ export async function getTokenBalance(wallet, mintAddress) {
         const balance = tokenAccounts.value[0].account.data.parsed.info.tokenAmount;
         return Number(balance.amount);
     } catch (error) {
-        console.error(`\x1b[31m~~~ [!] | ERROR | Ошибка при получении баланса токена: ${error.message}\x1b[0m`);
+        console.error(`\x1b[31m~~~ [!] | ERROR | Error getting token balance: ${error.message}\x1b[0m`);
         return 0;
     }
 }

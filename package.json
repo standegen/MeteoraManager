@@ -7,5 +7,16 @@
     "axios": "^1.7.9",
     "https-proxy-agent": "^7.0.6"
   },
-  "type": "module"
+  "type": "module",
+  "name": "meteoramanager",
+  "version": "1.0.0",
+  "description": "Automated position manager for Meteora DeFi on Solana.",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js"
+  },
+  "author": "",
+  "license": "ISC"
 }

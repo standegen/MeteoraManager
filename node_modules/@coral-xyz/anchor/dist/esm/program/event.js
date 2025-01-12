@@ -1,3 +1,4 @@
+import * as assert from "assert";
 const PROGRAM_LOG = "Program log: ";
 const PROGRAM_DATA = "Program data: ";
 const PROGRAM_LOG_START_INDEX = PROGRAM_LOG.length;
@@ -65,10 +66,8 @@ export class EventManager {
             this._eventListeners.delete(eventName);
         }
         // Kill the websocket connection if all listeners have been removed.
-        if (this._eventCallbacks.size === 0) {
-            if (this._eventListeners.size !== 0) {
-                throw new Error(`Expected event listeners size to be 0 but got ${this._eventListeners.size}`);
-            }
+        if (this._eventCallbacks.size == 0) {
+            assert.ok(this._eventListeners.size === 0);
             if (this._onLogsSubscriptionId !== undefined) {
                 await this._provider.connection.removeOnLogsListener(this._onLogsSubscriptionId);
                 this._onLogsSubscriptionId = undefined;
@@ -171,18 +170,14 @@ class ExecutionContext {
         this.stack = [];
     }
     program() {
-        if (!this.stack.length) {
-            throw new Error("Expected the stack to have elements");
-        }
+        assert.ok(this.stack.length > 0);
         return this.stack[this.stack.length - 1];
     }
     push(newProgram) {
         this.stack.push(newProgram);
     }
     pop() {
-        if (!this.stack.length) {
-            throw new Error("Expected the stack to have elements");
-        }
+        assert.ok(this.stack.length > 0);
         this.stack.pop();
     }
 }
